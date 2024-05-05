@@ -1,13 +1,30 @@
 import sqlite3
 from sqlite3 import Error
+import os
 
+# Input Functions
+def input_catch(prompt):
+    while True: 
+        u_input = input(f"{prompt}")
+        if u_input:
+            return u_input
+        else:
+            print("Invalid Input")
+
+def check_scores(scores):
+    if len(scores) == 5:
+        return True
+    else:
+        print("Invalid Input")
+
+# Database Functions
 def create_connection(db_file):
-    conn = None
     try:
         conn = sqlite3.connect(db_file)
     except Error as e:
         print(e)
-
+        exit(1)
+        
     return conn
 
 def create_table(conn, table):
@@ -16,100 +33,112 @@ def create_table(conn, table):
         cursor.execute(table)
     except Error as e:
         print(e)
+        exit(1)
 
 def add(conn):
-    i = 0
-    name = input("please input the student's name:")
-    number = input("please input the student's number:")
-    classes = input("please input the student's class:")
-    IPAscores = [int(x) for x in input("please input the UH1,UH2,UH3, PTS and PAS for science respectively, use commas with no space:").split(",")]
-    IPSscores = [int(x) for x in input("please input the UH1,UH2,UH3, PTS and PAS for social studies respectively, use commas with no space:").split(",")]
-    for x in IPAscores:
-        if x > 100:
-            IPAscores[i] = 100
-            i += 1 
-    i = 0
-    for y in IPSscores:
-        if y > 100:
-            IPSscores[i] = 100
-            i += 1 
-    i = 0
-    if len(IPAscores) == 5 and len(IPSscores) == 5 and name and number and classes:
-        student = f"""INSERT INTO students (Name, StNumber, Classes, IPA_UH, IPS_UH, PTS_IPA, PAS_IPA, PTS_IPS, PAS_IPS)
-                     VALUES('{name}',{number},'{classes}','{IPAscores[0]},{IPAscores[1]},{IPAscores[2]}','{IPSscores[0]},{IPSscores[1]},{IPSscores[2]}',{IPAscores[3]},{IPAscores[4]},{IPSscores[3]},{IPSscores[4]})"""
-        cursor = conn.cursor()
-        cursor.execute(student)
-        conn.commit()
-    else:
-        print("invalid input")
+    name = input_catch("please input the student's name:")
+    number = input_catch("please input the student's number:")
+    classes = input_catch("please input the student's class:")
+    while True:
+        IPAscores = [int(x) for x in input_catch("please input the UH1,UH2,UH3, PTS and PAS for science respectively, use commas with no space:").split(",")]
+        if check_scores(IPAscores): 
+            break
+    while True:
+        IPSscores = [int(x) for x in input_catch("please input the UH1,UH2,UH3, PTS and PAS for social studies respectively, use commas with no space:").split(",")]
+        if check_scores(IPSscores): 
+            break
+
+    for item, index in enumerate(IPAscores):
+        if item > 100:
+            IPAscores[index] = 100
+
+    for item, index in enumerate(IPSscores):
+        if item > 100:
+            IPSscores[index] = 100
+            
+    student = f"""INSERT INTO students 
+                (Name, StNumber, Classes, IPA_UH, IPS_UH, PTS_IPA, PAS_IPA, PTS_IPS, PAS_IPS)
+                VALUES
+                ('{name}',
+                {number},
+                '{classes}',
+                '{IPAscores[0]},{IPAscores[1]},{IPAscores[2]}',
+                '{IPSscores[0]},{IPSscores[1]},{IPSscores[2]}',
+                {IPAscores[3]},{IPAscores[4]},{IPSscores[3]},{IPSscores[4]});
+                """
+    cursor = conn.cursor()
+    cursor.execute(student)
+    conn.commit()
 
 def config(conn):
-    i = 0
-    idStudent = input("Please enter the name of the student whose data you wish to configure:")
-    number = input("new number:")
-    classes = input("new class:")
-    IPAscores = [int(x) for x in input("please input the new UH1,UH2,UH3, PTS and PAS scores for science respectively, use commas with no space:").split(",")]
-    IPSscores = [int(x) for x in input("please input the new UH1,UH2,UH3, PTS and PAS scores for social studies respectively, use commas with no space:").split(",")]
-    for x in IPAscores:
-        if x > 100:
-            IPAscores[i] = 100
-            i += 1 
-    i = 0
-    for y in IPSscores:
-        if y > 100:
-            IPSscores[i] = 100
-            i += 1 
-    i = 0
-    if len(IPAscores) == 5 and len(IPSscores) == 5 and number and classes:
-        student =  f'''UPDATE students
-                        SET StNumber = {number},
-                            Classes = '{classes}',
-                            IPA_UH = '{IPAscores[0]},{IPAscores[1]},{IPAscores[2]}',
-                            IPS_UH = '{IPSscores[0]},{IPSscores[1]},{IPSscores[2]}',
-                            PTS_IPA = {IPAscores[3]},
-                            PAS_IPA = {IPAscores[4]},
-                            PTS_IPS = {IPSscores[3]},
-                            PAS_IPS = {IPSscores[4]}
-                        WHERE Name = '{idStudent}'
-                        '''
-        cursor = conn.cursor()
-        cursor.execute(student)
-        conn.commit()
-    else:
-        print("invalid input")
+    idStudent = input_catch("Please enter the name of the student whose data you wish to configure:")
+    number = input_catch("new number:")
+    classes = input_catch("new class:")
+    while True:
+        IPAscores = [int(x) for x in input_catch("please input the new UH1,UH2,UH3, PTS and PAS scores for science respectively, use commas with no space:").split(",")]
+        if check_scores(IPAscores):
+            break
+    while True:
+        IPSscores = [int(x) for x in input_catch("please input the new UH1,UH2,UH3, PTS and PAS scores for social studies respectively, use commas with no space:").split(",")]
+        if check_scores(IPSscores):
+            break
+        
+    for item, index in enumerate(IPAscores):
+        if item > 100:
+            IPAscores[index] = 100
+
+    for item, index in enumerate(IPSscores):
+        if item > 100:
+            IPSscores[index] = 100
+
+    student =  f"""UPDATE students
+                    SET StNumber = {number},
+                        Classes = '{classes}',
+                        IPA_UH = '{IPAscores[0]},{IPAscores[1]},{IPAscores[2]}',
+                        IPS_UH = '{IPSscores[0]},{IPSscores[1]},{IPSscores[2]}',
+                        PTS_IPA = {IPAscores[3]},
+                        PAS_IPA = {IPAscores[4]},
+                        PTS_IPS = {IPSscores[3]},
+                        PAS_IPS = {IPSscores[4]}
+                    WHERE Name = '{idStudent}';
+                """
+    cursor = conn.cursor()
+    cursor.execute(student)
+    conn.commit()
 
 def delete(conn):
-    name = input("Imput the name of the student whose data you wish to delete:")
-    student = f'''DELETE FROM students 
-                WHERE Name='{name}'
-                '''
+    name = input_catch("Imput the name of the student whose data you wish to delete:")
+    student = f"""DELETE FROM students 
+                WHERE Name='{name}';
+                """
     cursor = conn.cursor()
     cursor.execute(student)
     conn.commit()
 
 def query(conn):
     print("[1] Student data\n[2] Show all data")
-    opt = input("Input the respective number to choose:")
+    opt = input_catch("Input the respective number to choose:")
     cursor = conn.cursor()
+    # Write function to get headers
     if opt == "1":
-        data = cursor.execute("SELECT * FROM students")
+        data = cursor.execute("PRAGMA table_info(students)")
         header = ""
-        for column in data.description:
-            header = header + column[0] + "|"
+        for column in data:
+            header = header + column[1] + "|"
         
-        name = input("Imput the name of the student whose data you wish to view:")
+        name = input_catch("Imput the name of the student whose data you wish to view:")
         cursor.execute(f"SELECT * FROM students WHERE Name='{name}'")
         rows = cursor.fetchall()
 
         print(header)
-        for row in rows:
-            print(row)
+        print(rows[0])
     if opt == "2":
-        data = cursor.execute("SELECT * FROM students")
+        data = cursor.execute("PRAGMA table_info(students)")
         header = ""
-        for column in data.description:
-            header = header + column[0] + " | "
+        for column in data:
+            header = header + column[1] + " | "
 
+        cursor.execute(f"SELECT * FROM students")
         rows = cursor.fetchall()
 
         print(header)
@@ -117,20 +146,22 @@ def query(conn):
             print(row)
 
 def main():
-    #----------------Change the directory to your own computer's !!!
-    database = r"D:\Christopher\SMACC\sqlite\menu.db"
+    cwd = os.getcwd()
+    database = f"{cwd}/menu.db"
     
-    student = """ CREATE TABLE IF NOT EXISTS students (
-                                        Name text PRIMARY KEY, 
-                                        StNumber integer,
-                                        Classes text,
-                                        IPA_UH text NOT NULL,
-                                        IPS_UH text NOT NULL,
-                                        PTS_IPA integer NOT NULL,
-                                        PAS_IPA integer NOT NULL,
-                                        PTS_IPS integer NOT NULL,
-                                        PAS_IPS integer NOT NULL
-                                    ); """
+    student = """CREATE TABLE IF NOT EXISTS students 
+                    (
+                        Name text PRIMARY KEY, 
+                        StNumber integer,
+                        Classes text,
+                        IPA_UH text NOT NULL,
+                        IPS_UH text NOT NULL,
+                        PTS_IPA integer NOT NULL,
+                        PAS_IPA integer NOT NULL,
+                        PTS_IPS integer NOT NULL,
+                        PAS_IPS integer NOT NULL
+                    ); 
+                """
     
     conn = create_connection(database)
 
