@@ -1,6 +1,12 @@
 import sqlite3
+import pandas as pd
 from sqlite3 import Error
 import os
+
+#-----PREQUISITES
+# 1. sqlite3 module
+# 2. pandas module
+# Otherwise the file might run into trouble
 
 # Input Functions
 def input_catch(prompt):
@@ -48,13 +54,17 @@ def add(conn):
         if check_scores(IPSscores): 
             break
 
-    for item, index in enumerate(IPAscores):
+    for index, item in enumerate(IPAscores):
         if item > 100:
             IPAscores[index] = 100
+        elif item < 0:
+            IPAscores[index] = 0
 
-    for item, index in enumerate(IPSscores):
+    for index, item in enumerate(IPSscores):
         if item > 100:
             IPSscores[index] = 100
+        elif item < 0:
+            IPSscores[index] = 0
             
     student = f"""INSERT INTO students 
                 (Name, StNumber, Classes, IPA_UH, IPS_UH, PTS_IPA, PAS_IPA, PTS_IPS, PAS_IPS)
@@ -83,13 +93,17 @@ def config(conn):
         if check_scores(IPSscores):
             break
         
-    for item, index in enumerate(IPAscores):
+    for index, item in enumerate(IPAscores):
         if item > 100:
             IPAscores[index] = 100
+        elif item < 0:
+            IPAscores[index] = 0
 
-    for item, index in enumerate(IPSscores):
+    for index, item in enumerate(IPSscores):
         if item > 100:
             IPSscores[index] = 100
+        elif item < 0:
+            IPSscores[index] = 0
 
     student =  f"""UPDATE students
                     SET StNumber = {number},
@@ -121,29 +135,16 @@ def query(conn):
     cursor = conn.cursor()
     # Write function to get headers
     if opt == "1":
-        data = cursor.execute("PRAGMA table_info(students)")
-        header = ""
-        for column in data:
-            header = header + column[1] + "|"
-        
-        name = input_catch("Imput the name of the student whose data you wish to view:")
-        cursor.execute(f"SELECT * FROM students WHERE Name='{name}'")
-        rows = cursor.fetchall()
-
-        print(header)
-        print(rows[0])
+        name = input("Please type in the name of the student whose data you wish to view:")
+        data = pd.read_sql_query(f'''
+                                 SELECT * FROM students WHERE Name='{name}'
+                                 ''', conn, index_col="Name")
+        print(data)
     if opt == "2":
-        data = cursor.execute("PRAGMA table_info(students)")
-        header = ""
-        for column in data:
-            header = header + column[1] + " | "
-
-        cursor.execute(f"SELECT * FROM students")
-        rows = cursor.fetchall()
-
-        print(header)
-        for row in rows:
-            print(row)
+        data = pd.read_sql_query('''
+                                 SELECT * FROM students
+                                 ''', conn, index_col="Name")
+        print(data)
 
 def main():
     cwd = os.getcwd()
