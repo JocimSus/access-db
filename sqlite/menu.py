@@ -121,19 +121,20 @@ def config(conn):
     conn.commit()
 
 def delete(conn):
+    print("Enlisted Students:")
+    cursor = conn.cursor()
+    cursor.execute("SELECT Name FROM students")
+    print(cursor.fetchall())
     name = input_catch("Imput the name of the student whose data you wish to delete:")
     student = f"""DELETE FROM students 
                 WHERE Name='{name}';
                 """
-    cursor = conn.cursor()
     cursor.execute(student)
     conn.commit()
 
 def query(conn):
     print("[1] Student data\n[2] Show all data")
     opt = input_catch("Input the respective number to choose:")
-    cursor = conn.cursor()
-    # Write function to get headers
     if opt == "1":
         name = input("Please type in the name of the student whose data you wish to view:")
         data = pd.read_sql_query(f'''
