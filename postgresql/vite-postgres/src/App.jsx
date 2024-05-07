@@ -1,33 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react"
+import "./App.css"
+
+function handleSubmit(e) {
+  e.preventDefault()
+  let st_name = e.target.name.value
+  let st_class = e.target.class.value
+  let st_number = e.target.number.value
+
+  console.log(`Name: ${st_name}\nClass: ${st_class}\nNumber: ${st_number}`)
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="title">Access Scores Database</div>
+      <div className="input-block">
+        <div className="header-1">Input Data</div>
+        <form
+          className="forms"
+          onSubmit={(e) => handleSubmit(e)}
+        >
+          <div className="form-inputs">
+            <div className="form-label">
+              <label>Student Name:</label>
+              <label>Student Class:</label>
+              <label>Student Number:</label>
+            </div>
+
+            <div className="form-input">
+              <input
+                type="text"
+                name="name"
+                placeholder="Student's Name"
+              />
+              <input
+                type="text"
+                name="class"
+                placeholder="Student's Class"
+              />
+              <input
+                type="text"
+                name="number"
+                placeholder="Student's Number"
+              />
+            </div>
+          </div>
+          <input
+            type="submit"
+            value="Submit"
+          />
+        </form>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
