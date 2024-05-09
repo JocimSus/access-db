@@ -21,8 +21,8 @@ function App() {
         {backendData == null ? (
           <p>Loading...</p>
         ) : (
-          backendData.users.map((user, i) => {
-            ;<p key={i}>{user}</p>
+          backendData.users.map((user, index) => {
+            return <p key={index}>{user}</p>
           })
         )}
       </div>
