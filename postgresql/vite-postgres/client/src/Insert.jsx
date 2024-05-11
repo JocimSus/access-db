@@ -1,11 +1,11 @@
 function Insert() {
   function handleSubmit(e) {
-    e.preventDefault()
-    let st_name = e.target.name.value
-    let st_class = e.target.class.value
-    let st_nis = e.target.nis.value
+    e.preventDefault();
+    let st_nis = e.target.nis.value;
+    let st_name = e.target.name.value;
+    let st_class = e.target.class.value;
 
-    console.log(`Name: ${st_name}\nClass: ${st_class}\nNumber: ${st_nis}`)
+    console.log(`Name: ${st_name}\nClass: ${st_class}\nNumber: ${st_nis}`);
   }
 
   return (
@@ -48,7 +48,7 @@ function Insert() {
         </div>
       </form>
     </>
-  )
+  );
 }
 
-export default Insert
+export default Insert;

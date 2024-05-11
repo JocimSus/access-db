@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import Insert from "./Insert.jsx"
-import "./App.css"
+import Insert from "./Insert.jsx";
+import "./App.css";
 
 function App() {
-  const [backendData, setBackendData] = useState(null)
+  const [backendData, setBackendData] = useState(null);
 
   useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
       .then((data) => setBackendData(data))
-      .catch((err) => console.log(err))
-  }, [])
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
@@ -22,12 +22,12 @@ function App() {
           <p>Loading...</p>
         ) : (
           backendData.users.map((user, index) => {
-            return <p key={index}>{user}</p>
+            return <p key={index}>{user}</p>;
           })
         )}
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
