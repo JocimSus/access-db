@@ -2,6 +2,7 @@
   "name": "vite-postgres",
   "private": true,
   "version": "0.0.0",
+  "proxy": "http://localhost:5000",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,8 +11,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "pg": "^8.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
