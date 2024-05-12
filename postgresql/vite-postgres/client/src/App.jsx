@@ -4,10 +4,11 @@ import Insert from "./Insert.jsx";
 import "./App.css";
 
 function App() {
+  const studentsDataApiV1 = "/api/v1/students_data";
   const [backendData, setBackendData] = useState(null);
 
   useEffect(() => {
-    fetch("/api")
+    fetch(studentsDataApiV1)
       .then((res) => res.json())
       .then((data) => setBackendData(data))
       .catch((err) => console.log(err));
@@ -18,11 +19,22 @@ function App() {
       <div className="title">Access Scores Database</div>
       <div className="input-block">
         <Insert />
-        {backendData == null ? (
+        {backendData === null ? (
           <p>Loading...</p>
         ) : (
-          backendData.users.map((user, index) => {
-            return <p key={index}>{user}</p>;
+          backendData.map((student, index) => {
+            return (
+              <div key={index}>
+                <p>Name: {student.name}</p>
+                <p>NIS: {student.nis}</p>
+                <p>Class: {student.class}</p>
+                <p>UH1: {student.uh1}</p>
+                <p>UH2: {student.uh2}</p>
+                <p>UH3: {student.uh3}</p>
+                <p>PTS: {student.pts}</p>
+                <p>PAS: {student.pas}</p>
+              </div>
+            );
           })
         )}
       </div>
