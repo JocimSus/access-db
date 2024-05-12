@@ -19,6 +19,7 @@ function App() {
       <div className="title">Access Scores Database</div>
       <div className="input-block">
         <Insert />
+        {console.log(backendData)}
         {backendData === null ? (
           <p>Loading...</p>
         ) : (
