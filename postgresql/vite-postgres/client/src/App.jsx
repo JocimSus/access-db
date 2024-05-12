@@ -4,7 +4,8 @@ import Insert from "./Insert.jsx";
 import "./App.css";
 
 function App() {
-  const studentsDataApiV1 = "/api/v1/students_data";
+  const studentsDataApiV1 =
+    "https://api-postgres.vercel.app/api/v1/students_data";
   const [backendData, setBackendData] = useState(null);
 
   useEffect(() => {
