@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
-        target: "http://localhost:5000",
+      "/api/v1/students_data": {
+        target: "https://api-postgres.vercel.app",
         changeOrigin: true,
         secure: false,
       },
