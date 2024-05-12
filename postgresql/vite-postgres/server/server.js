@@ -1,5 +1,6 @@
 const express = require("express");
 const studentsDataRoutes = require("./src/students_data/routes");
+require("dotenv").config();
 
 const app = express();
 const port = 5000;
