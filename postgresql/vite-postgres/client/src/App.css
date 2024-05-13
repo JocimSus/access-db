@@ -24,6 +24,11 @@
   font-size: xx-large;
 }
 
+.selection {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
 .input-block {
   display: flex;
   flex-direction: column;
@@ -64,7 +69,7 @@
 }
 
 .form-input input {
-  height: 1rem;
+  height: 22;
 }
 
 .form-input {
@@ -78,4 +83,16 @@
 .form-submit input {
   margin-left: 200px;
   width: 250px;
+}
+
+th {
+  padding-left: 25px;
+}
+
+td {
+  padding-left: 25px;
+}
+
+table {
+  margin-top: 10px;
 }
