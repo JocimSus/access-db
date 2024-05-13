@@ -22,12 +22,14 @@ function Insert() {
 
     try {
       const response = await fetch(`${studentsDataApiV1}/${formData.nis}`);
-      if (response) {
+      const data = await response.json();
+      if (data.length !== 0) {
         setFetchStatus("duplicate");
         return;
       }
     } catch (error) {
       console.log(error.message);
+      return;
     }
 
     try {
